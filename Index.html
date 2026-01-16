@@ -1,0 +1,546 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DR. White Pharmacy | Trusted Health Solutions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green: #0b8f5a;
+      --dark: #0b0b0b;
+      --light: #ffffff;
+      --soft: #f3faf7;
+      --accent: #056b43;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Poppins', sans-serif; background: var(--soft); color: #2c2c2c; line-height: 1.7; }
+    header { background: linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url('images/pharmacy-hero.jpg') center/cover no-repeat; color: var(--light); padding: 120px 20px; text-align: center; }
+    header h1 { font-family: 'Playfair Display', serif; font-size: 3rem; letter-spacing: 2px; }
+    header p { margin-top: 15px; font-size: 1.1rem; }
+    nav { background: rgba(11,11,11,.95); display: flex; justify-content: center; gap: 40px; padding: 18px; position: sticky; top: 0; z-index: 100; }
+    nav a { color: var(--light); text-decoration: none; font-weight: 500; }
+    nav a:hover { color: #7dffb3; }
+    section { padding: 70px 20px; max-width: 1200px; margin: auto; }
+    .section-title { text-align: center; margin-bottom: 50px; }
+    .section-title h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--dark); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
+    .card { background: var(--light); border-radius: 18px; overflow: hidden; box-shadow: 0 14px 30px rgba(0,0,0,.12); }
+    .card img { width: 100%; height: 140px; object-fit: cover; }
+    .card-content { padding: 14px; }
+    .card-content h3 { margin-bottom: 6px; font-size: 1.1rem; }
+    .card-content p { font-size: .9rem; color: #555; }
+    .order-btn { display: inline-block; margin-top: 12px; padding: 10px 22px; background: var(--green); color: #fff; text-decoration: none; border-radius: 25px; font-size: .85rem; font-weight: 500; cursor: pointer; }
+    .order-btn:hover { opacity: .9; }
+    .qty-wrap { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+    .qty-wrap input { width: 60px; padding: 5px; border-radius: 6px; border: 1px solid #ccc; }
+    form { max-width: 600px; margin: auto; background: var(--light); padding: 30px; border-radius: 20px; box-shadow: 0 18px 40px rgba(0,0,0,.12); }
+    form input, form select, form textarea { width: 100%; padding: 12px; margin-top: 12px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit; }
+    form button { margin-top: 20px; padding: 14px; width: 100%; border: none; border-radius: 30px; background: var(--green); color: #fff; font-size: .95rem; cursor: pointer; }
+    .category-nav{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+    .category-nav a{padding:8px 18px;border-radius:30px;background:var(--green);color:#fff;text-decoration:none;font-size:.85rem}
+    .category-nav a:hover{background:var(--accent)}
+    .prescription-banner{max-width:1000px;margin:0 auto 32px;background:#fff3cd;border:1px solid #ffe69c;color:#664d03;border-radius:14px;padding:14px 16px;font-size:.9rem;display:flex;gap:10px;align-items:flex-start}
+    .prescription-banner strong{font-weight:600}
+    .prescription-badge{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:12px;background:#dc3545;color:#fff;font-size:.7rem;vertical-align:middle}
+    .trust-section{max-width:1000px;margin:60px auto 40px;background:var(--light);padding:30px;border-radius:18px;box-shadow:0 14px 30px rgba(0,0,0,.1);text-align:center}
+    .trust-section h3{font-family:'Playfair Display',serif;color:var(--dark);margin-bottom:20px}
+    .trust-section p{color:#555;line-height:1.5;margin-bottom:15px}
+    footer{background:#000;color:#aaa;text-align:center;padding:20px;font-size:.85rem}
+    #cart {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #0b8f5a;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 30px;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+/* SLIDE-IN CART */
+.cart-panel {
+  position: fixed;
+  top: 0;
+  right: -360px;
+  width: 360px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: -6px 0 30px rgba(0,0,0,.25);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  z-index: 9999;
+  transition: right 0.35s ease;
+}
+
+.cart-panel.open {
+  right: 0;
+}
+
+/* SCROLLABLE CART ITEMS */
+#cartItems {
+  flex: 1;
+  overflow-y: auto;
+  margin: 15px 0;
+  padding: 0;
+  list-style: none;
+}
+
+#cartItems li {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+/* FOOTER */
+.cart-footer {
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+.cart-footer button {
+  width: 100%;
+  padding: 12px;
+  background: #0b8f5a;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.cart-footer button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: #25d366;
+  color: #fff;
+  padding: 14px 18px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: bold;
+  z-index: 10000;
+}
+  </style>
+</head>
+<body>
+  <div id="cart">
+  🛒 Cart (<span id="cartCount">0</span>)
+</div>
+
+<div id="cartBox" class="cart-panel">
+  <h3>Your Cart</h3>
+
+  <ul id="cartItems"></ul>
+
+  <div class="cart-footer">
+    <p>Total: ₦<span id="total">0</span></p>
+    <button id="checkoutBtn" onclick="checkout()">Checkout</button>
+  </div>
+</div><header>
+  <h1>Dr.White Pharmacy</h1>
+  <p>Order Medicines • Schedule Treatment • Trusted Care</p>
+</header><nav>
+  <a href="#drugs">Drugs</a>
+  <a href="#treatment">Treatment</a>
+  <a href="#contact">Contact</a>
+</nav><section id="drugs">
+  <div class="section-title"><h2>Order Drugs</h2></div>  <div style="max-width:500px;margin:0 auto 30px">
+    <input type="text" id="drugSearch" placeholder="Search drugs..." oninput="filterDrugs()" style="width:100%;padding:14px 18px;border-radius:30px;border:1px solid #ccc;font-family:inherit">
+  </div>  <div class="category-nav">
+    <a href="#pain">Pain Relief</a>
+    <a href="#antibiotics">Antibiotics</a>
+    <a href="#malaria">Malaria</a>
+    <a href="#chronic">Chronic Care</a>
+    <a href="#vitamins">Vitamins</a>
+  </div>  <div class="prescription-banner">
+    <div>⚠️</div>
+    <div>
+      <strong>Prescription Notice:</strong> Some medications require a valid doctor’s prescription. Please send your prescription on WhatsApp after placing an order. Our licensed pharmacist will verify before dispensing.
+    </div>
+  </div>  <div class="grid">
+    <div class="card">
+      <img src="images/paracetamol.jpg">
+      <div class="card-content">
+        <h3>Paracetamol</h3>
+        <p>Relief for pain and fever</p>
+        <p><strong>₦1,200</strong></p>
+        <div class="qty-wrap"><label>Qty:</label><input type="number" min="1" value="1" /></div>
+        <a class="order-btn" onclick="addToCart(this)">Add to Cart</a>
+      </div>
+    </div><div class="card">
+  <img src="images/amoxicillin.jpg">
+  <div class="card-content">
+    <h3>Amoxicillin <span class="prescription-badge">Rx</span></h3>
+    <p>Antibiotic (Prescription Required)</p>
+    <p><strong>₦2,500</strong></p>
+    <div class="qty-wrap"><label>Qty:</label><input type="number" min="1" value="1" /></div>
+    <a class="order-btn" onclick="addToCart(this)">Add to Cart</a>
+  </div>
+</div>
+
+<div class="card">
+  <img src="images/artemether.jpg">
+  <div class="card-content">
+    <h3>Artemether/Lumefantrine</h3>
+    <p>Malaria Treatment</p>
+    <p><strong>₦3,800</strong></p>
+    <div class="qty-wrap"><label>Qty:</label><input type="number" min="1" value="1" /></div>
+    <a class="order-btn" onclick="addToCart(this)">Add to Cart</a>
+  </div>
+</div>
+
+<div class="card">
+  <img src="images/vitamin-c.jpg">
+  <div class="card-content">
+    <h3>Vitamin C</h3>
+    <p>Immune system support</p>
+    <p><strong>₦1,800</strong></p>
+    <div class="qty-wrap"><label>Qty:</label><input type="number" min="1" value="1" /></div>
+    <a class="order-btn" onclick="addToCart(this)">Add to Cart</a>
+  </div>
+</div>
+
+<div class="card">
+  <img src="images/bp-drug.jpg">
+  <div class="card-content">
+    <h3>Amlodipine</h3>
+    <p>Blood Pressure Control</p>
+    <p><strong>₦2,200</strong></p>
+    <div class="qty-wrap"><label>Qty:</label><input type="number" min="1" value="1" /></div>
+    <a class="order-btn" onclick="addToCart(this)">Add to Cart</a>
+  </div>
+</div>
+
+<div class="card">
+  <img src="images/ibuprofen.jpg">
+  <div class="card-content">
+    <h3>Ibuprofen</h3>
+    <p>Anti-inflammatory pain relief</p>
+    <p><strong>₦1,600</strong></p>
+    <div class="qty-wrap"><label>Qty:</label><input type="number" min="1" value="1" /></div>
+    <a class="order-btn" onclick="addToCart(this)">Add to Cart</a>
+  </div>
+</div>
+
+<div class="card">
+  <img src="images/metformin.jpg">
+  <div class="card-content">
+    <h3>Metformin</h3>
+    <p>Diabetes Management</p>
+    <p><strong>₦2,700</strong></p>
+    <div class="qty-wrap"><label>Qty:</label><input type="number" min="1" value="1" /></div>
+    <a class="order-btn" onclick="addToCart(this)">Add to Cart</a>
+  </div>
+</div>
+
+<div class="card">
+  <img src="images/antacid.jpg">
+  <div class="card-content">
+    <h3>Antacid</h3>
+    <p>Relief from stomach upset</p>
+    <p><strong>₦1,400</strong></p>
+    <div class="qty-wrap"><label>Qty:</label><input type="number" min="1" value="1" /></div>
+    <a class="order-btn" onclick="addToCart(this)">Add to Cart</a>
+  </div>
+</div>
+
+  </div>
+       
+      </div>
+    </div>
+  </div><h3 id="antibiotics" style="margin:60px 0 20px">Antibiotics (Prescription Required)</h3>
+<div class="grid">
+  <div class="card">
+    <img src="images/amoxicillin.jpg">
+    <div class="card-content">
+      <h3>Amoxicillin</h3>
+      <p>Broad‑spectrum antibiotic</p>
+      <p><strong>₦2,500</strong></p>
+      <div class="qty-wrap"><label>Qty:</label><input type="number" min="1" value="1" /></div>
+      <a class="order-btn" onclick="addToCart(this)">Add to Cart</a>
+    </div>
+  </div>  <div class="card">
+    <img src="images/azithromycin.jpg">
+    <div class="card-content">
+      <h3>Azithromycin <span class="prescription-badge">Rx</span></h3>
+      <p>Respiratory & bacterial infections</p>
+      <p><strong>₦4,200</strong></p>
+      <div class="qty-wrap"><label>Qty:</label><input type="number" min="1" value="1" /></div>
+      <a class="order-btn" onclick="addToCart(this)">Add to Cart</a>
+    </div>
+  </div>
+</div><h3 id="malaria" style="margin:60px 0 20px">Malaria Treatment</h3>
+<div class="grid">
+  <div class="card">
+    <img src="images/artemether.jpg">
+    <div class="card-content">
+      <h3>Artemether/Lumefantrine</h3>
+      <p>Standard malaria treatment</p>
+      <p><strong>₦3,800</strong></p>
+      <div class="qty-wrap"><label>Qty:</label><input type="number" min="1" value="1" /></div>
+      <a class="order-btn" onclick="addToCart(this)">Add to Cart</a>
+    </div>
+  </div>  <div class="card">
+    <img src="images/quinine.jpg">
+    <div class="card-content">
+      <h3>Quinine <span class="prescription-badge">Rx</span></h3>
+      <p>Severe malaria management</p>
+      <p><strong>₦2,900</strong></p>
+      <div class="qty-wrap"><label>Qty:</label><input type="number" min="1" value="1" /></div>
+      <a class="order-btn" onclick="addToCart(this)">Add to Cart</a>
+    </div>
+  </div>
+</div><h3 id="chronic" style="margin:60px 0 20px">Chronic Care</h3>
+<div class="grid">
+  <div class="card">
+    <img src="images/bp-drug.jpg">
+    <div class="card-content">
+      <h3>Amlodipine</h3>
+      <p>Blood pressure control</p>
+      <p><strong>₦2,200</strong></p>
+      <div class="qty-wrap"><label>Qty:</label><input type="number" min="1" value="1" /></div>
+     <a class="order-btn" onclick="addToCart(this)">Add to Cart</a>
+    </div>
+  </div>  <div class="card">
+    <img src="images/metformin.jpg">
+    <div class="card-content">
+      <h3>Metformin</h3>
+      <p>Diabetes management</p>
+      <p><strong>₦2,700</strong></p>
+      <div class="qty-wrap"><label>Qty:</label><input type="number" min="1" value="1" /></div>
+      <a class="order-btn" onclick="addToCart(this)">Add to Cart</a>
+    </div>
+  </div>
+</div><h3 id="vitamins" style="margin:60px 0 20px">Vitamins & Supplements</h3>
+<div class="grid">
+  <div class="card">
+    <img src="images/vitamin-c.jpg">
+    <div class="card-content">
+      <h3>Vitamin C</h3>
+      <p>Immune system booster</p>
+      <p><strong>₦1,800</strong></p>
+      <div class="qty-wrap"><label>Qty:</label><input type="number" min="1" value="1" /></div>
+     <a class="order-btn" onclick="addToCart(this)">Add to Cart</a>
+    </div>
+  </div>  <div class="card">
+    <img src="images/multivitamin.jpg">
+    <div class="card-content">
+      <h3>Multivitamins</h3>
+      <p>Daily nutritional support</p>
+      <p><strong>₦2,100</strong></p>
+      <div class="qty-wrap"><label>Qty:</label><input type="number" min="1" value="1" /></div>
+     <a class="order-btn" onclick="addToCart(this)">Add to Cart</a>
+    </div></section><section class="trust-section">
+      
+    
+  <h3>Why Choose PrimeCare Pharmacy?</h3>
+  <p>✅ Licensed Pharmacists Available</p>
+  <p>✅ Verified Prescription Compliance</p>
+  <p>✅ Fast & Reliable Delivery Across Nigeria</p>
+  <p>✅ 24/7 Customer Support via WhatsApp</p>
+  <p>✅ Quality Assured Medicines</p>
+</section><section id="treatment">
+  <section class="how-it-works">
+  <h2>How It Works</h2>
+  <ol>
+    <li>Select your drugs</li>
+    <li>Add to cart & review order</li>
+    <li>Checkout via WhatsApp</li>
+    <li>Fast delivery to your location</li>
+  </ol>
+</section>
+<section class="payment">
+  <h3>Payment Instructions</h3>
+  <p>Bank Transfer / POS on Delivery</p>
+  <p><strong>Bank:</strong> Access Bank</p>
+  <p><strong>Account Name:</strong> PrimeCare Pharmacy</p>
+  <p><strong>Account Number:</strong> 0123456789</p>
+</section>
+<section class="disclaimer">
+  <small>
+    ⚠️ Some medications require a valid prescription.  
+    PrimeCare Pharmacy does not encourage self-medication.  
+    Always consult a licensed healthcare professional.
+  </small>
+</section>
+<a href="https://wa.me/2348034010264" class="whatsapp-float">
+  💬 Chat Pharmacist
+</a>
+  <div class="section-title"><h2>Schedule Treatment</h2></div>
+  <form onsubmit="scheduleTreatment(event)">
+    <input type="text" placeholder="Full Name" required />
+    <input type="tel" placeholder="Phone Number" required />
+    <select required>
+      <option value="">Select Treatment</option>
+      <option>Malaria Treatment</option>
+      <option>Typhoid Treatment</option>
+      <option>Blood Pressure Check</option>
+      <option>Diabetes Management</option>
+    </select>
+    <input type="date" required />
+    <textarea placeholder="Additional Notes"></textarea>
+    <button type="submit">Schedule Appointment</button>
+  </form>
+</section><footer id="contact">
+  <p>© 2025 PrimeCare Pharmacy. All Rights Reserved.</p>
+</footer><script>
+function orderDrug(btn) {
+  const card = btn.closest('.card');
+  const drugName = card.querySelector('h3').innerText;
+  const priceText = card.querySelector('strong').innerText;
+  const qty = parseInt(card.querySelector('input').value) || 1;
+
+  // Extract numeric price
+  const unitPrice = parseInt(priceText.replace(/[^0-9]/g, ''));
+
+  const deliveryFee = 2500;
+  const subtotal = unitPrice * qty;
+  const total = subtotal + deliveryFee;
+
+  const message =
+`Hello PrimeCare Pharmacy,
+
+🧾 Order Details:
+💊 Drug: ${drugName}
+💰 Unit Price: ₦${unitPrice}
+📦 Quantity: ${qty}
+🧮 Subtotal: ₦${subtotal}
+🚚 Delivery Fee: ₦${deliveryFee}
+—————————————
+✅ Total Amount: ₦${total}
+
+📍 Delivery Address:`;  
+
+  window.open(
+    'https://wa.me/2348034010264?text=' + encodeURIComponent(message),
+    '_blank'
+  );
+}
+</script>
+
+<script>
+let cart = [];
+const deliveryFee = 2500;
+
+/* CART TOGGLE (FIXED) */
+document.getElementById("cart").onclick = () => {
+  document.getElementById("cartBox").classList.toggle("open");
+};
+
+/* ADD TO CART */
+function addToCart(btn) {
+  const card = btn.closest('.card');
+  const name = card.querySelector('h3').innerText;
+  const price = parseInt(card.querySelector('strong').innerText.replace(/[^0-9]/g,''));
+  const qty = parseInt(card.querySelector('input').value) || 1;
+
+  const existing = cart.find(item => item.name === name);
+  if (existing) {
+    existing.qty += qty;
+  } else {
+    cart.push({ name, price, qty });
+  }
+
+  updateCart();
+}
+
+/* UPDATE CART */
+function updateCart() {
+  const list = document.getElementById('cartItems');
+  const count = document.getElementById('cartCount');
+  const totalEl = document.getElementById('total');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+
+  list.innerHTML = '';
+  let sum = 0;
+  let totalQty = 0;
+
+  cart.forEach((item, index) => {
+    const itemTotal = item.price * item.qty;
+    sum += itemTotal;
+    totalQty += item.qty;
+
+    list.innerHTML += `
+      <li>
+        ${item.name}
+        <br>
+        <button onclick="decreaseQty(${index})">−</button>
+        ${item.qty}
+        <button onclick="increaseQty(${index})">+</button>
+        — ₦${itemTotal}
+        <span class="remove-item" onclick="removeFromCart(${index})">✖</span>
+      </li>
+    `;
+  });
+
+  count.innerText = totalQty;
+  totalEl.innerText = cart.length ? sum + deliveryFee : 0;
+
+  checkoutBtn.disabled = cart.length === 0;
+}
+
+setTimeout(() => {
+  const list = document.getElementById('cartItems');
+  list.scrollTop = list.scrollHeight;
+}, 50);
+
+localStorage.setItem('pharmacyCart', JSON.stringify(cart));
+
+/* QUANTITY CONTROLS */
+function increaseQty(index) {
+  cart[index].qty++;
+  updateCart();
+}
+
+function decreaseQty(index) {
+  if (cart[index].qty > 1) {
+    cart[index].qty--;
+  } else {
+    cart.splice(index, 1);
+  }
+  updateCart();
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  updateCart();
+}
+
+
+
+/* CHECKOUT */
+function checkout() {
+  let sum = 0;
+  let message = `Hello PrimeCare Pharmacy,%0A%0A🧾 Order Summary:%0A`;
+
+  cart.forEach(item => {
+    const itemTotal = item.price * item.qty;
+    sum += itemTotal;
+    message += `💊 ${item.name} x${item.qty} – ₦${itemTotal}%0A`;
+  });
+
+  message += `%0A🚚 Delivery Fee: ₦${deliveryFee}`;
+  message += `%0A———————————%0A✅ Total: ₦${sum + deliveryFee}`;
+  message += `%0A%0A📍 Delivery Address:`;
+
+  window.open(
+    'https://wa.me/2348034010264?text=' + message,
+    '_blank'
+  );
+}
+
+window.onload = () => {
+  const savedCart = localStorage.getItem('pharmacyCart');
+  if (savedCart) {
+    cart = JSON.parse(savedCart);
+    updateCart();
+  }
+};
+</script></body>
+</html>
